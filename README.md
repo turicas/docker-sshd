@@ -5,7 +5,7 @@ Inspired by [docker-wordpress-nginx](https://github.com/eugeneware/docker-wordpr
 
 ## Installation
 
-```
+```bash
 $ git clone https://github.com/sullof/docker-sshd.git
 $ cd docker-sshd
 ```
@@ -15,16 +15,16 @@ If you prefer to use a password, comment the keys block
 ## Usage
 
 Build the container:
-```
-sudo docker build -t sullof/sshd .
+```bash
+$ sudo docker build -t sullof/sshd .
 ```
 It's better if you change the tag using your Docker username.
 
 To spawn a new instance and see the IP:
 
 ```bash
-CONTAINER_ID=$(sudo docker run -d docker-ssh)
-sudo docker inspect $CONTAINER_ID | grep IPAddress | awk '{ print $2 }' | tr -d ',"'
+$ CONTAINER_ID=$(sudo docker run -d docker-ssh)
+$ sudo docker inspect $CONTAINER_ID | grep IPAddress | awk '{ print $2 }' | tr -d ',"'
 ```
 You will have a result like this:
 ```
@@ -32,7 +32,7 @@ You will have a result like this:
 ```
 And, finally, you should connect to the container with 
 ```bash
-ssh root@172.17.0.74
+$ ssh root@172.17.0.74
 ```
 
 ## What after?
@@ -43,9 +43,9 @@ FROM sullof/sshd
 ```
 and modify appropriately the ```supervisord.conf``` file without overwriting the previous one. For example, in your derivated images, you 
 could use the following approach appending a new file:
-```
-ADD ./supervisord.conf.append /etc/supervisord.conf.append
-RUN cat /etc/supervisord.conf.append >> /etc/supervisord.conf && rm /etc/supervisord.conf.append
+```bash
+$ ADD ./supervisord.conf.append /etc/supervisord.conf.append
+$ RUN cat /etc/supervisord.conf.append >> /etc/supervisord.conf && rm /etc/supervisord.conf.append
 ```
 There is an example at [docker-wpngx](https://github.com/sullof/docker-wpngx).
 
