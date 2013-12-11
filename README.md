@@ -16,22 +16,15 @@ If you prefer to use a password, comment the keys block
 
 Build the container:
 ```
-$ sudo docker build -t="docker-ssh" .
+sudo docker build -t sullof/sshd .
 ```
-To spawn a new instance:
+It's better if you change the tag using your Docker username.
+
+To spawn a new instance and see the IP:
 
 ```bash
-$ sudo docker run -d docker-ssh
-```
-
-You'll see an ID output like:
-```
-d404cc2fa27b
-```
-
-You can see the ip address of the container with the command:
-```bash
-sudo docker inspect d404cc2fa27b | grep IPAddress | awk '{ print $2 }' | tr -d ',"'
+CONTAINER_ID=$(sudo docker run -d docker-ssh)
+sudo docker inspect $CONTAINER_ID | grep IPAddress | awk '{ print $2 }' | tr -d ',"'
 ```
 You will have a result like this:
 ```
@@ -42,51 +35,19 @@ And, finally, you should connect to the container with
 ssh root@172.17.0.74
 ```
 
-
 ## What after?
 
-You can create new images starting your Dockerfile with
+You can create new images starting your Dockerfile with something like
 ```
-FROM docker-ssh
+FROM sullof/sshd
 ```
-Modifying appropriately the ```supervisord.conf``` file without overwrite the previous one. For example you 
+and modify appropriately the ```supervisord.conf``` file without overwriting the previous one. For example, in your derivated images, you 
 could use the following approach appending a new file:
 ```
 ADD ./supervisord.conf.append /etc/supervisord.conf.append
 RUN cat /etc/supervisord.conf.append >> /etc/supervisord.conf && rm /etc/supervisord.conf.append
 ```
-
-## Finally
-
-If you don't want to build this dockerfile, you can pull the image directly from the Docker registry with
-```
-sudo docker pull sullof/sshd
-```
-Of course, in this case, you have to change the autorized_keys in a different way.
-First off, run the container in interactive mode:
-```
-sudo docker run -t -i docker-sshd bash
-```
-Inside the container, edit the file with
-```
-root@f5814e9b322e:~# nano /root/.ssh/authorized_keys
-```
-remove the existent row, paste your public key, and save.
-Without exiting, open a new terminal and run
-```
-sudo docker ps
-```
-to see what is the ID of the container. If it is d404cc2fa27b, commit the container to a new image:
-```
-sudo docker commit d404cc2fa27b your_name/sshd
-```
-The new image your_name/sshd now contains your public key and is ready to use.
-
-Enjoy!
-
-## What if I want to access just with a password?
-
-Look at the branch _with-pwd_ and you'll find something for you.
+There is an example at [docker-wpngx](https://github.com/sullof/docker-wpngx).
 
 ## License 
 
