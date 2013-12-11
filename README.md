@@ -45,7 +45,8 @@ and modify appropriately the ```supervisord.conf``` file without overwriting the
 could use the following approach appending a new file:
 ```bash
 $ ADD ./supervisord.conf.append /etc/supervisord.conf.append
-$ RUN cat /etc/supervisord.conf.append >> /etc/supervisord.conf && rm /etc/supervisord.conf.append
+$ RUN cat /etc/supervisord.conf.append >> /etc/supervisord.conf &&\
+      rm /etc/supervisord.conf.append
 ```
 There is an example at [docker-wpngx](https://github.com/sullof/docker-wpngx).
 
