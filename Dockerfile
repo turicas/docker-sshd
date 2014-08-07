@@ -1,7 +1,7 @@
 FROM ubuntu:12.04
 MAINTAINER Francesco Sullo, sullof@sullof.com, http://sullof.com
 
-RUN apt-get update && apt-get upgrade
+RUN apt-get update && apt-get -y upgrade
 RUN apt-get install -y openssh-server python-setuptools && /usr/bin/easy_install supervisor
 
 ADD adds/authorized_keys /authorized_keys
