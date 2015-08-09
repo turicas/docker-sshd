@@ -1,5 +1,9 @@
-FROM ubuntu:12.04
-MAINTAINER Francesco Sullo, sullof@sullof.com, http://sullof.com
+# Based on <https://github.com/sullof/docker-sshd>
+
+FROM debian:testing
+
+MAINTAINER Álvaro Justen <alvarojusten@gmail.com>
+
 
 ENV DEBIAN_FRONTEND noninteractive
 
