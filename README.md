@@ -1,56 +1,59 @@
 # docker-ssh
 
-A container from Ubuntu 12.04 with openssh-server preinstalled to be used as a base image.
-Inspired by [docker-wordpress-nginx](https://github.com/eugeneware/docker-wordpress-nginx) container by [Eugene Ware](http://eugeneware.com).
+Forked from [sullof/docker-sshd](https://github.com/sullof/docker-sshd).
+
+A container based on Debian Testing with openssh-server preinstalled to be used
+as a base image.
+Inspired by
+[docker-wordpress-nginx](https://github.com/eugeneware/docker-wordpress-nginx)
+container by [Eugene Ware](http://eugeneware.com).
+
 
 ## Installation
 
 ```bash
-$ git clone https://github.com/sullof/docker-sshd.git
-$ cd docker-sshd
+git clone https://github.com/turicas/docker-sshd.git
+cd docker-sshd
 ```
-Substitute the current ```authorized_keys``` file with your public key. If not, potentially, I could access your container : )
-If you prefer to use a password, comment the keys block 
+
+The SSH daemon is configured to do not accept password logins (only keys) so
+you need to put your keys there. Change the file `adds/authorized_keys` before
+building the container.
+
 
 ## Usage
 
+
+### Building the Image
+
 Build the container:
+
 ```bash
-$ sudo docker build -t sullof/sshd .
+docker build -t turicas/sshd .
 ```
+
 It's better if you change the tag using your Docker username.
+
+
+### Starting a Container and Connecting to It
 
 To spawn a new instance and see the IP:
 
 ```bash
-$ CONTAINER_ID=$(sudo docker run -d docker-ssh)
-$ sudo docker inspect $CONTAINER_ID | grep IPAddress | awk '{ print $2 }' | tr -d ',"'
+CONTAINER_ID=$(docker run -d turicas/sshd)
+docker inspect $CONTAINER_ID | grep IPAddress | awk '{ print $2 }' | tr -d ',"'
 ```
-You will have a result like this:
-```
-172.17.0.74
-```
-And, finally, you should connect to the container with 
+
+You will have a result like this: `172.17.0.74`.
+
+And, finally, you should connect to the container with
+
 ```bash
-$ ssh root@172.17.0.74
+ssh root@172.17.0.74
 ```
 
-## What after?
 
-You can create new images starting your Dockerfile with something like
-```
-FROM sullof/sshd
-```
-and modify appropriately the ```supervisord.conf``` file without overwriting the previous one. For example, in your derivated images, you 
-could use the following approach appending a new file:
-```bash
-$ ADD ./supervisord.conf.append /etc/supervisord.conf.append
-$ RUN cat /etc/supervisord.conf.append >> /etc/supervisord.conf &&\
-      rm /etc/supervisord.conf.append
-```
-There is an example at [docker-wpngx](https://github.com/sullof/docker-wpngx).
-
-## License 
+## License
 
 (The MIT License)
 
@@ -74,4 +77,3 @@ IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
 CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
